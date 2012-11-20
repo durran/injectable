@@ -26,7 +26,6 @@ module Injectable
     #
     # @since 0.0.0
     def included(klass)
-      Registry.add(klass, [])
       klass.extend(Macros)
     end
   end

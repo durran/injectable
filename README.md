@@ -8,16 +8,12 @@ Usage
 
 Say we have a `UserService` that has some basic logic for performing operations
 related to a `User` and a `FacebookService`. We can tell the `UserService` what
-its dependencies are via `Injectable`:
+its dependencies are via `Injectable` (Objects that have no dependencies do not)
+need to include the module.
 
 ```ruby
-class User
-  include Injectable
-end
-
-class FacebookService
-  include Injectable
-end
+class User; end
+class FacebookService; end
 
 class UserService
   include Injectable
@@ -52,12 +48,58 @@ user_service = container.get(UserService)
 ```
 
 Since `User` and `FacebookService` take no arguments, we don't even need to
-pass them into the container:
+pass them into the container - it will automatically instantiate new ones:
 
 ```ruby
 container = Injectable::Container.new
+user = container.get(User)
 user_service = container.get(UserService)
 ```
 
 Polymorphism is not supported since we don't have interfaces in Ruby. Setter
 injection is also not supported.
+
+How about the real world
+------------------------
+
+Let's look at the above classes, but say we're in a Rails application:
+
+```ruby
+class User < ActiveRecord::Base
+end
+
+class FacebookService
+  def post_to_wall(id, message)
+    # ...
+  end
+end
+
+class UserService
+  include Injectable
+  dependencies :user, :facebook_service
+
+  def post_to_wall(message)
+    facebook_service.post_to_wall(user.id, message)
+  end
+end
+```
+
+Now in our controller, we can just create a new container the user we find
+and then ask the container to do all the other work. This is more closely
+related to what one might do in a real application.
+
+```ruby
+class UsersController < ApplicationController
+
+  def post_to_wall
+    container.get(UserService).post_to_wall(params[:message])
+    respond_with container.get(User)
+  end
+
+  private
+
+  def container
+    @container ||= Injectable::Container.new(User.find(params[:id]))
+  end
+end
+```

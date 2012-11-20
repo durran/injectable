@@ -5,12 +5,8 @@ describe Injectable::Container do
   describe "#get" do
 
     before(:all) do
-      class User
-        include Injectable
-      end
-      class UserFinder
-        include Injectable
-      end
+      class User; end
+      class UserFinder; end
       class UserService
         include Injectable
         dependencies :user, :user_finder

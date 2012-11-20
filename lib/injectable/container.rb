@@ -42,7 +42,7 @@ module Injectable
     private
 
     def dependencies(klass)
-      Registry.signature(klass).map do |dependency|
+      (Registry.signature(klass) || []).map do |dependency|
         get(dependency)
       end
     end
