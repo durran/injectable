@@ -1,3 +1,9 @@
+PATH
+  remote: .
+  specs:
+    injectable (0.0.0)
+      activesupport (~> 3)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -40,8 +46,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (~> 3)
   guard-rspec
+  injectable!
   rake
   rb-fsevent
   rspec (~> 2.12)
