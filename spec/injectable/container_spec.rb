@@ -5,8 +5,12 @@ describe Injectable::Container do
   describe "#get" do
 
     before(:all) do
-      class User; end
-      class UserFinder; end
+      class User
+        include Injectable
+      end
+      class UserFinder
+        include Injectable
+      end
       class UserService
         include Injectable
         dependencies :user, :user_finder
@@ -54,6 +58,22 @@ describe Injectable::Container do
 
       it "caches the instance" do
         expect(container.get(UserService)).to eql(container.get(UserService))
+      end
+    end
+
+    context "when no arg dependencies are not in the container" do
+
+      let(:container) do
+        described_class.new
+      end
+
+      it "returns a new instance" do
+        expect(container.get(UserService)).to be_a(UserService)
+      end
+
+      it "returns instances of the no arg objects" do
+        expect(container.get(User)).to be_a(User)
+        expect(container.get(UserFinder)).to be_a(UserFinder)
       end
     end
   end

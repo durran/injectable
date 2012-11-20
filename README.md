@@ -11,8 +11,13 @@ related to a `User` and a `FacebookService`. We can tell the `UserService` what
 its dependencies are via `Injectable`:
 
 ```ruby
-class User; end
-class FacebookService; end
+class User
+  include Injectable
+end
+
+class FacebookService
+  include Injectable
+end
 
 class UserService
   include Injectable
@@ -51,7 +56,8 @@ pass them into the container:
 
 ```ruby
 container = Injectable::Container.new
-user = container.get(User)
-facebook_service = container.get(FacebookService)
 user_service = container.get(UserService)
 ```
+
+Polymorphism is not supported since we don't have interfaces in Ruby. Setter
+injection is also not supported.
