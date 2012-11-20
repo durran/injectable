@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "activesupport", "~> 3"
+gemspec
 gem "rake"
 
 group :test do
