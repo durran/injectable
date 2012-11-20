@@ -5,10 +5,8 @@ describe Injectable::Macros do
   describe ".dependencies" do
 
     before(:all) do
-      class User
-      end
-      class UserFinder
-      end
+      class User; end
+      class UserFinder; end
     end
 
     after(:all) do
@@ -40,6 +38,10 @@ describe Injectable::Macros do
       it "provides an attribute reader for the dependency" do
         expect(service.user).to eq(user)
       end
+
+      it "adds the signature to the registry" do
+        expect(Injectable::Registry.signature(UserService)).to eq([ User ])
+      end
     end
 
     context "when providing multiple dependencies" do
@@ -70,6 +72,12 @@ describe Injectable::Macros do
       it "provides an attribute reader for each dependency" do
         expect(service.user).to eq(user)
         expect(service.user_finder).to eq(finder)
+      end
+
+      it "adds the signature to the registry" do
+        expect(
+          Injectable::Registry.signature(UserService)
+        ).to eq([ User, UserFinder ])
       end
     end
   end
