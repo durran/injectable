@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    injectable (0.0.0)
+    injectable (0.0.1)
       activesupport (~> 3)
 
 GEM
