@@ -1,7 +1,9 @@
 Injectable [![Build Status](https://secure.travis-ci.org/durran/injectable.png?branch=master&.png)](http://travis-ci.org/durran/injectable) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/durran/injectable)
 ========
 
-Injectable is an extremely simple dependency injection framework for Ruby.
+Injectable is an extremely simple dependency injection framework for Ruby. It's
+stupid simple and experimental so don't expect support for now - but may turn out
+to be something in the future.
 
 Usage
 -----
