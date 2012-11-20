@@ -10,8 +10,8 @@ Usage
 
 Say we have a `UserService` that has some basic logic for performing operations
 related to a `User` and a `FacebookService`. We can tell the `UserService` what
-its dependencies are via `Injectable` (Objects that have no dependencies do not)
-need to include the module.
+its dependencies are via `Injectable` (Objects that have no dependencies do not
+need to include the module.)
 
 ```ruby
 class User; end
