@@ -11,12 +11,14 @@ describe Injectable::Container do
         include Injectable
         dependencies :user, :user_finder
       end
+      class AnotherUserFinder; end
     end
 
     after(:all) do
       Object.__send__(:remove_const, :User)
       Object.__send__(:remove_const, :UserFinder)
       Object.__send__(:remove_const, :UserService)
+      Object.__send__(:remove_const, :AnotherUserFinder)
     end
 
     let(:user) do
@@ -70,6 +72,30 @@ describe Injectable::Container do
       it "returns instances of the no arg objects" do
         expect(container.get(User)).to be_a(User)
         expect(container.get(UserFinder)).to be_a(UserFinder)
+      end
+    end
+
+    context "when a specified class is registered for a given role" do
+      let(:container) do
+        described_class.new
+      end
+
+      before do
+        container.register(:user_finder, AnotherUserFinder)
+      end
+
+      it "returns an instance of the specified class for that role" do
+        expect(container.get(:user_finder)).to be_an(AnotherUserFinder)
+      end
+    end
+
+    context "when asked for a role but no class registered" do
+      let(:container) do
+        described_class.new
+      end
+
+      it "raises Injectable::RoleNotRegistered" do
+        expect { container.get(:user_finder) }.to raise_error(Injectable::RoleNotRegistered)
       end
     end
   end
