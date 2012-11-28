@@ -46,7 +46,7 @@ object of a specific type and let the container figure out the dependencies:
 user = User.new
 facebook_service = FacebookService.new
 container = Injectable::Container.new(user, facebook_service)
-user_service = container.get(UserService)
+user_service = container.get(:user_service)
 ```
 
 Since `User` and `FacebookService` take no arguments, we don't even need to
@@ -54,8 +54,8 @@ pass them into the container - it will automatically instantiate new ones:
 
 ```ruby
 container = Injectable::Container.new
-user = container.get(User)
-user_service = container.get(UserService)
+user = container.get(:user)
+user_service = container.get(:user_service)
 ```
 
 Injectable also supports depending on roles rather than concrete classes by
@@ -64,8 +64,8 @@ allowing the registration of classes whose instances perform that role:
 ```ruby
 container = Injectable::Container.new
 container.register(:facebook_service, DifferentFacebookService)
-user_service = container.get(UserService)
-# `user_service`'s facebook_service will be an implementation of
+user_service = container.get(:user_service)
+# `user_service`'s facebook_service will be an instance of
 # DifferentFacebookService
 ```
 
