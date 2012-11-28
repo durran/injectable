@@ -40,7 +40,7 @@ describe Injectable::Macros do
       end
 
       it "adds the signature to the registry" do
-        expect(Injectable::Registry.signature(UserService)).to eq([ User ])
+        expect(Injectable::Registry.signature(UserService)).to eq([ :user ])
       end
     end
 
@@ -77,7 +77,7 @@ describe Injectable::Macros do
       it "adds the signature to the registry" do
         expect(
           Injectable::Registry.signature(UserService)
-        ).to eq([ User, UserFinder ])
+        ).to eq([ :user, :user_finder ])
       end
     end
   end

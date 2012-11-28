@@ -3,6 +3,7 @@ require "active_support/inflector"
 require "injectable/container"
 require "injectable/macros"
 require "injectable/registry"
+require "injectable/role_not_registered"
 
 # Objects that include Injectable can have their dependencies satisfied by the
 # container, and removes some basic boilerplate code of creating basic

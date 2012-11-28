@@ -18,8 +18,8 @@ describe Injectable::Registry do
       described_class.add(User, [ :user_finder ])
     end
 
-    it "constantizes the provided symbols" do
-      expect(described_class.signature(User)).to eq([ UserFinder ])
+    it "remembers the dependencies of the class" do
+      expect(described_class.signature(User)).to eq([ :user_finder ])
     end
   end
 end

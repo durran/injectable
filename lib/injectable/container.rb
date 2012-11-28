@@ -11,12 +11,16 @@ module Injectable
     # @example Get an instance of an object for class UserService.
     #   container.get(UserService)
     #
-    # @param [ Class ] klass The type of the object to return.
+    # @param [ Symbol ] role the role which the returned object should perform.
     #
     # @return [ Object ] The instantiated object.
     #
+    # @raise [ Injectable::RoleNotRegistered ] if queried for a role which is not
+    #                                          registered
+    #
     # @since 0.0.0
-    def get(klass)
+    def get(role)
+      klass = implementing_class_for(role)
       if instantiated_objects.has_key?(klass)
         instantiated_objects[klass]
       else
@@ -39,6 +43,21 @@ module Injectable
       end
     end
 
+    # Register that instances of klass will perform the given role in this
+    # container context.
+    #
+    # @example Register that the user_finder role will be performed by
+    # instances of DatabaseUserFinder
+    #   container.register(:user_finder, DatabaseUserFinder)
+    #
+    # @param [ Symbol ] role The name of the role.
+    # @param [ Class ] klass The name of the class performing this role.
+    #
+    # @since 0.0.1
+    def register(role, klass)
+      implementing_classes[role] = klass
+    end
+
     private
 
     def dependencies(klass)
@@ -53,6 +72,19 @@ module Injectable
 
     def instantiated_objects
       @instantiated_objects ||= {}
+    end
+
+    def implementing_classes
+      @implementing_classes ||= {}
+    end
+
+    def implementing_class_for(role)
+      klass = implementing_classes[role]
+      if klass.nil? && Object.const_defined?(role.to_s.classify)
+        klass = role.to_s.classify.constantize
+      end
+      raise Injectable::RoleNotRegistered.new(role) if klass.nil?
+      klass
     end
   end
 end
