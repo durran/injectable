@@ -58,8 +58,18 @@ user = container.get(User)
 user_service = container.get(UserService)
 ```
 
-Polymorphism is not supported since we don't have interfaces in Ruby. Setter
-injection is also not supported.
+Injectable also supports depending on roles rather than concrete classes by
+allowing the registration of classes whose instances perform that role:
+
+```ruby
+container = Injectable::Container.new
+container.register(:facebook_service, DifferentFacebookService)
+user_service = container.get(UserService)
+# `user_service`'s facebook_service will be an implementation of
+# DifferentFacebookService
+```
+
+Setter injection is not supported.
 
 How about the real world
 ------------------------

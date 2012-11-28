@@ -11,9 +11,7 @@ module Injectable
     # @example Get an instance of an object for class UserService.
     #   container.get(UserService)
     #
-    # @param [ Class, Symbol ] role If a Class, the type of the object to
-    #                               return. If a Symbol, the role which the
-    #                               returned object should perform.
+    # @param [ Symbol ] role the role which the returned object should perform.
     #
     # @return [ Object ] The instantiated object.
     #
@@ -22,11 +20,7 @@ module Injectable
     #
     # @since 0.0.0
     def get(role)
-      klass = if role.is_a?(Symbol)
-                implementing_class_for(role)
-              else
-                role
-              end
+      klass = implementing_class_for(role)
       if instantiated_objects.has_key?(klass)
         instantiated_objects[klass]
       else
@@ -85,7 +79,12 @@ module Injectable
     end
 
     def implementing_class_for(role)
-      implementing_classes.fetch(role) { raise Injectable::RoleNotRegistered.new(role) }
+      klass = implementing_classes[role]
+      if klass.nil? && Object.const_defined?(role.to_s.classify)
+        klass = role.to_s.classify.constantize
+      end
+      raise Injectable::RoleNotRegistered.new(role) if klass.nil?
+      klass
     end
   end
 end

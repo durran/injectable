@@ -19,7 +19,7 @@ module Injectable
     #
     # @since 0.0.0
     def add(klass, dependencies)
-      signatures[klass] = dependencies.map { |name| name.to_s.classify.constantize }
+      signatures[klass] = dependencies.map { |name| name }
     end
 
     # Get the constructor method signature for the provided class.
