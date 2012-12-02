@@ -124,8 +124,8 @@ related to what one might do in a real application.
 class UsersController < ApplicationController
 
   def post_to_wall
-    container.get(UserService).post_to_wall(params[:message])
-    respond_with container.get(User)
+    container.get(:user_service).post_to_wall(params[:message])
+    respond_with container.get(:user)
   end
 
   private
