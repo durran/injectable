@@ -3,7 +3,6 @@ require "active_support/inflector"
 require "injectable/container"
 require "injectable/macros"
 require "injectable/registry"
-require "injectable/role_not_registered"
 
 # Objects that include Injectable can have their dependencies satisfied by the
 # container, and removes some basic boilerplate code of creating basic
@@ -27,6 +26,7 @@ module Injectable
     #
     # @since 0.0.0
     def included(klass)
+      Registry.register_implementation(klass.name.underscore.to_sym, klass)
       klass.extend(Macros)
     end
   end

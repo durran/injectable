@@ -10,12 +10,17 @@ Usage
 
 Say we have a `UserService` that has some basic logic for performing operations
 related to a `User` and a `FacebookService`. We can tell the `UserService` what
-its dependencies are via `Injectable` (Objects that have no dependencies do not
-need to include the module.)
+its dependencies are via `Injectable`. Note that as of `0.0.2` all objects that
+can be injecteed into others must include the `Injectable` module.
 
 ```ruby
-class User; end
-class FacebookService; end
+class User
+  include Injectable
+end
+
+class FacebookService
+  include Injectable
+end
 
 class UserService
   include Injectable
@@ -63,10 +68,18 @@ allowing the registration of classes whose instances perform that role:
 
 ```ruby
 container = Injectable::Container.new
-container.register(:facebook_service, DifferentFacebookService)
+container.register_implementation(:facebook_service, DifferentFacebookService)
 user_service = container.get(:user_service)
-# `user_service`'s facebook_service will be an instance of
-# DifferentFacebookService
+# `user_service`'s facebook_service will be an instance of DifferentFacebookService
+```
+
+You can also define concrete implementations at the global level:
+
+```ruby
+Injectable::Registry.register_implementation(:facebook_service, DifferentFacebookService)
+container = Injectable::Container.new
+user_service = container.get(:user_service)
+# `user_service`'s facebook_service will be an instance of DifferentFacebookService
 ```
 
 Setter injection is not supported.
@@ -78,9 +91,12 @@ Let's look at the above classes, but say we're in a Rails application:
 
 ```ruby
 class User < ActiveRecord::Base
+  include Injectable
 end
 
 class FacebookService
+  include Injectable
+
   def post_to_wall(id, message)
     # ...
   end

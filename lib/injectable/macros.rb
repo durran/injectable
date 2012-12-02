@@ -29,7 +29,7 @@ module Injectable
     def dependencies(*injectables)
       define_constructor(*injectables)
       define_readers(*injectables)
-      Registry.add(self, injectables)
+      Registry.register_signature(self, injectables)
     end
 
     private

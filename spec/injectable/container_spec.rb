@@ -5,8 +5,12 @@ describe Injectable::Container do
   describe "#get" do
 
     before(:all) do
-      class User; end
-      class UserFinder; end
+      class User
+        include Injectable
+      end
+      class UserFinder
+        include Injectable
+      end
       class UserService
         include Injectable
         dependencies :user, :user_finder
@@ -55,7 +59,7 @@ describe Injectable::Container do
       end
 
       it "caches the instance" do
-        expect(container.get(:user_service)).to eql(container.get(UserService))
+        expect(container.get(:user_service)).to eql(container.get(:user_service))
       end
     end
 
@@ -76,12 +80,17 @@ describe Injectable::Container do
     end
 
     context "when a specified class is registered for a given role" do
+
       let(:container) do
         described_class.new
       end
 
+      let(:user_service) do
+        container.get(:user_service)
+      end
+
       before do
-        container.register(:user_finder, AnotherUserFinder)
+        container.register_implementation(:user_finder, AnotherUserFinder)
       end
 
       it "returns an instance of the specified class for that role" do
@@ -89,12 +98,12 @@ describe Injectable::Container do
       end
 
       it "continues to wire up dependent objects correctly" do
-        user_service = container.get(:user_service)
         expect(user_service.user_finder).to be_an(AnotherUserFinder)
       end
     end
 
     context "when asked for a role but no class registered" do
+
       let(:container) do
         described_class.new
       end
@@ -104,17 +113,11 @@ describe Injectable::Container do
       end
 
       context "and there's no defined constant matching the role name" do
-        before do
-          Object.__send__(:remove_const, :UserFinder)
-        end
 
-        it "raises Injectable::RoleNotRegistered" do
-          expect { container.get(:user_finder) }.to raise_error(Injectable::RoleNotRegistered)
-        end
-
-        after do
-          #avoid triggering an error in the after(:all) block above
-          class UserFinder; end
+        it "raises an error" do
+          expect {
+            container.get(:renderable)
+          }.to raise_error(Injectable::Registry::NotRegistered)
         end
       end
     end

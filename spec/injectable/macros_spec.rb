@@ -42,6 +42,12 @@ describe Injectable::Macros do
       it "adds the signature to the registry" do
         expect(Injectable::Registry.signature(UserService)).to eq([ :user ])
       end
+
+      it "adds the implementation to the registry" do
+        expect(
+          Injectable::Registry.implementation(:user_service)
+        ).to eq(UserService)
+      end
     end
 
     context "when providing multiple dependencies" do
