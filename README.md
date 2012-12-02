@@ -11,7 +11,7 @@ Usage
 Say we have a `UserService` that has some basic logic for performing operations
 related to a `User` and a `FacebookService`. We can tell the `UserService` what
 its dependencies are via `Injectable`. Note that as of `0.0.2` all objects that
-can be injecteed into others must include the `Injectable` module.
+can be injected into others must include the `Injectable` module.
 
 ```ruby
 class User
