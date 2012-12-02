@@ -14,6 +14,21 @@ module Injectable
 
   class << self
 
+    # Configure the global injectable registry. Simply just yields to the
+    # registry itself. If no block is provided returns the registry.
+    #
+    # @example Configure the registry.
+    #   Injectable.configure do |registry|
+    #     registry.register_implementation(:user, User)
+    #   end
+    #
+    # @return [ Injectable::Registry ] The registry.
+    #
+    # @since 0.0.3
+    def configure
+      block_given? ? yield(Registry) : Registry
+    end
+
     # Including the Injectable module will extend the class with the necessary
     # macros.
     #

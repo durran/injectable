@@ -64,7 +64,8 @@ user_service = container.get(:user_service)
 ```
 
 Injectable also supports depending on roles rather than concrete classes by
-allowing the registration of classes whose instances perform that role:
+allowing the registration of classes whose instances perform that role. An
+implementation can be registered on a single container itself as a "one off":
 
 ```ruby
 container = Injectable::Container.new
@@ -73,10 +74,13 @@ user_service = container.get(:user_service)
 # `user_service`'s facebook_service will be an instance of DifferentFacebookService
 ```
 
-You can also define concrete implementations at the global level:
+You can also define concrete implementations at the global level via `configure`:
 
 ```ruby
-Injectable::Registry.register_implementation(:facebook_service, DifferentFacebookService)
+Injectable.configure do |config|
+  config.register_implementation(:facebook_service, DifferentFacebookService)
+end
+
 container = Injectable::Container.new
 user_service = container.get(:user_service)
 # `user_service`'s facebook_service will be an instance of DifferentFacebookService
