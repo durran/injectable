@@ -11,6 +11,4 @@ Gem::Specification.new do |s|
   s.description  = s.summary
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
   s.require_path = "lib"
-
-  s.add_dependency("activesupport", ["~> 3"])
 end

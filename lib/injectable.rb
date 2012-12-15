@@ -1,6 +1,6 @@
 # encoding: utf-8
-require "active_support/inflector"
 require "injectable/container"
+require "injectable/inflector"
 require "injectable/macros"
 require "injectable/registry"
 
@@ -41,7 +41,10 @@ module Injectable
     #
     # @since 0.0.0
     def included(klass)
-      Registry.register_implementation(klass.name.underscore.to_sym, klass)
+      Registry.register_implementation(
+        Inflector.underscore(klass.name).to_sym,
+        klass
+      )
       klass.extend(Macros)
     end
   end
