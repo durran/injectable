@@ -58,6 +58,32 @@ module Injectable
       implementing_classes[name] = klass
     end
 
+    # This error is raised when asking for an object out of the container that
+    # cannot be resolved.
+    #
+    # @since 0.0.4
+    class Unresolvable < Exception
+
+      # @attribute [r] klass The klass that was attempted to instantiate.
+      attr_reader :klass
+
+      # Initialize the new error.
+      #
+      # @example Initialize the error.
+      #   Unresolvable.new(Persistable)
+      #
+      # @param [ Class ] klass The class that was attempted to instantiate.
+      #
+      # @since 0.0.4
+      def initialize(klass)
+        @klass = klass
+        super(
+          "Could not instantiate an object for #{klass}. " +
+          "Please ensure all required dependencies are in the container."
+        )
+      end
+    end
+
     private
 
     def dependencies(klass)
@@ -67,7 +93,11 @@ module Injectable
     end
 
     def instantiate(klass)
-      klass.new(*dependencies(klass))
+      begin
+        klass.new(*dependencies(klass))
+      rescue ArgumentError
+        raise Unresolvable.new(klass)
+      end
     end
 
     def instantiated_objects

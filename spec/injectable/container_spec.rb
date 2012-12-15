@@ -79,6 +79,35 @@ describe Injectable::Container do
       end
     end
 
+    context "when the dependencies cannot be resolved" do
+
+      before(:all) do
+        class Band
+          include Injectable
+
+          attr_reader :attributes
+
+          def initialize(attributes)
+            @attributes = attributes
+          end
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :Band)
+      end
+
+      let(:container) do
+        described_class.new
+      end
+
+      it "raises an error" do
+        expect {
+          container.get(:band)
+        }.to raise_error(Injectable::Container::Unresolvable)
+      end
+    end
+
     context "when a specified class is registered for a given role" do
 
       let(:container) do
