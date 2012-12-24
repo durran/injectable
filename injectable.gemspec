@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
   s.email        = ["durran@gmail.com"]
   s.summary      = "Dead simple Ruby dependency injection"
   s.description  = s.summary
-  s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
+  s.files        = Dir.glob("lib/**/*") + %w(README.md LICENSE Rakefile)
   s.require_path = "lib"
 end
