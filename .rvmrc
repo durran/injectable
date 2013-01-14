@@ -1,1 +1,1 @@
-rvm use 1.9.3@injectable --create
+rvm use 1.9.3-p327@injectable --create
