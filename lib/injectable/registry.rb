@@ -1,4 +1,6 @@
 # encoding: utf-8
+require "injectable/registerable"
+
 module Injectable
 
   # The registry keeps track of all objects and their dependencies that need
@@ -6,6 +8,7 @@ module Injectable
   #
   # @since 0.0.0
   module Registry
+    include Registerable
     extend self
 
     # Get an implementation for the provided name.
@@ -20,21 +23,6 @@ module Injectable
     # @since 0.0.2
     def implementation(name)
       implementations[name] || raise(NotRegistered.new(name))
-    end
-
-    # Add an implementing class for a name to the registry.
-    #
-    # @example Add an implementation.
-    #   Injectable::Registry.register_implementation(
-    #     :persistable, User
-    #   )
-    #
-    # @param [ Symbol ] name The name of the implementation.
-    # @param [ Class ] klass The implementing class.
-    #
-    # @since 0.0.2
-    def register_implementation(name, klass)
-      implementations[name] = klass
     end
 
     # Add a constructor method signature to the registry.
@@ -91,10 +79,6 @@ module Injectable
     end
 
     private
-
-    def implementations
-      @implementations ||= {}
-    end
 
     def signatures
       @signatures ||= {}

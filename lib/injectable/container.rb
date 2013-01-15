@@ -1,10 +1,13 @@
 # encoding: utf-8
+require "injectable/registerable"
+
 module Injectable
 
   # A simple container that can resolve dependencies.
   #
   # @since 0.0.0
   class Container
+    include Registerable
 
     # Get an instance of an object from the container with the provided class.
     #
@@ -20,7 +23,7 @@ module Injectable
     #
     # @since 0.0.0
     def get(name)
-      klass = implementing_class(name)
+      klass = implementation(name)
       if instantiated_objects.has_key?(klass)
         instantiated_objects[klass]
       else
@@ -41,21 +44,6 @@ module Injectable
       objects.each do |object|
         instantiated_objects[object.class] = object
       end
-    end
-
-    # Register that instances of klass will perform the given role in this
-    # container context.
-    #
-    # @example Register that the user_finder role will be performed by
-    #   instances of DatabaseUserFinder
-    #   container.register_implementation(:user_finder, DatabaseUserFinder)
-    #
-    # @param [ Symbol ] name The name of the role.
-    # @param [ Class ] klass The name of the class performing this role.
-    #
-    # @since 0.0.1
-    def register_implementation(name, klass)
-      implementing_classes[name] = klass
     end
 
     # This error is raised when asking for an object out of the container that
@@ -92,6 +80,10 @@ module Injectable
       end
     end
 
+    def implementation(name)
+      implementations[name] || Registry.implementation(name)
+    end
+
     def instantiate(klass)
       begin
         klass.new(*dependencies(klass))
@@ -102,14 +94,6 @@ module Injectable
 
     def instantiated_objects
       @instantiated_objects ||= {}
-    end
-
-    def implementing_class(name)
-      implementing_classes[name] || Registry.implementation(name)
-    end
-
-    def implementing_classes
-      @implementing_classes ||= {}
     end
   end
 end
