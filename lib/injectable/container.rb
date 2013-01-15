@@ -9,7 +9,7 @@ module Injectable
     # Get an instance of an object from the container with the provided class.
     #
     # @example Get an instance of an object for class UserService.
-    #   container.get(UserService)
+    #   container.get(:user_service)
     #
     # @param [ Symbol ] name the role which the returned object should perform.
     #
