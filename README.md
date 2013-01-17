@@ -86,6 +86,47 @@ user_service = container.get(:user_service)
 # `user_service`'s facebook_service will be an instance of DifferentFacebookService
 ```
 
+Multiple implementations for the same role can be configured - the rules on how
+they will be used are as follows: Check for an already instantiated instance in
+the container. If one or both exist, take the first. If none exist, then attempt to
+resolve the dependency with each registered role until one succeeds. An example:
+
+```ruby
+module Portable
+  def charge
+    # Some logic here.
+  end
+end
+
+class Phone
+  include Injectable
+  include Portable
+end
+
+class Tablet
+  include Injectable
+  include Portable
+end
+
+class Application
+  include Injectable
+  dependencies :portable
+end
+
+Injectable.configure do |config|
+  config.register_implementation(:portable, Phone, Tablet)
+end
+
+container = Injectable::Container.new
+application = container.get(:application)
+application.portable #=> Returns a new Phone.
+
+tablet = Tablet.new
+container = Injectable::Container.new(tablet)
+application = container.get(:application)
+application.portable #=> Returns the existing instance of a Tablet.
+```
+
 Setter injection is not supported.
 
 How about the real world
