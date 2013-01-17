@@ -9,6 +9,7 @@ describe Injectable::Registerable do
         include Injectable::Registerable
       end
       class User; end
+      class SuperUser; end
     end
 
     after(:all) do
@@ -20,12 +21,37 @@ describe Injectable::Registerable do
       Register.new
     end
 
-    let(:implementation) do
-      register.register_implementation(:admin, User)
+    context "when registering a single implementation" do
+
+      let(:implementation) do
+        register.register_implementation(:admin, User)
+      end
+
+      it "adds the implementation" do
+        expect(implementation).to eq([ User ])
+      end
     end
 
-    it "adds the user to the implementations" do
-      expect(implementation).to eq(User)
+    context "when registering multiple implementations" do
+
+      let(:implementation) do
+        register.register_implementation(:admin, User, SuperUser)
+      end
+
+      it "adds the implementation" do
+        expect(implementation).to eq([ User, SuperUser ])
+      end
+    end
+
+    context "when registering multiple with an array" do
+
+      let(:implementation) do
+        register.register_implementation(:admin, [ User, SuperUser ])
+      end
+
+      it "adds the implementation" do
+        expect(implementation).to eq([ User, SuperUser ])
+      end
     end
   end
 end

@@ -23,7 +23,7 @@ describe Injectable::Registry do
       end
 
       it "returns the implementing class" do
-        expect(implementation).to eq(User)
+        expect(implementation).to eq([ User ])
       end
     end
 
@@ -64,7 +64,7 @@ describe Injectable::Registry do
     end
 
     it "remembers the dependencies of the class" do
-      expect(described_class.implementation(:persistable)).to eq(User)
+      expect(described_class.implementation(:persistable)).to eq([ User ])
     end
   end
 

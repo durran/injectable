@@ -22,7 +22,9 @@ module Injectable
     #
     # @since 0.0.2
     def implementation(name)
-      implementations[name] || raise(NotRegistered.new(name))
+      impl = implementations[name]
+      raise(NotRegistered.new(name)) unless impl && !impl.empty?
+      impl
     end
 
     # Add a constructor method signature to the registry.

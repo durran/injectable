@@ -10,11 +10,11 @@ module Injectable
     #   container.register_implementation(:user_finder, DatabaseUserFinder)
     #
     # @param [ Symbol ] name The name of the role.
-    # @param [ Class ] klass The name of the class performing this role.
+    # @param [ *Class ] classes The names of the classes performing this role.
     #
     # @since 0.0.1
-    def register_implementation(name, klass)
-      implementations[name] = klass
+    def register_implementation(name, *classes)
+      implementations[name] = classes.flatten
     end
 
     private

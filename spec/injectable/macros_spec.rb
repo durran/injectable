@@ -46,7 +46,7 @@ describe Injectable::Macros do
       it "adds the implementation to the registry" do
         expect(
           Injectable::Registry.implementation(:user_service)
-        ).to eq(UserService)
+        ).to eq([ UserService ])
       end
     end
 

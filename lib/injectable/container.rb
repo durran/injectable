@@ -23,11 +23,12 @@ module Injectable
     #
     # @since 0.0.0
     def get(name)
-      klass = implementation(name)
-      if instantiated_objects.has_key?(klass)
+      classes = registered_implementations(name)
+      if klass = instantiated_class(classes)
         instantiated_objects[klass]
       else
-        instantiated_objects[klass] = instantiate(klass)
+        object = instantiate(classes)
+        instantiated_objects[object.class] = object
       end
     end
 
@@ -52,21 +53,22 @@ module Injectable
     # @since 0.0.4
     class Unresolvable < Exception
 
-      # @attribute [r] klass The klass that was attempted to instantiate.
-      attr_reader :klass
+      # @attribute [r] classes The classes that were attempted to instantiate.
+      attr_reader :classes
 
       # Initialize the new error.
       #
       # @example Initialize the error.
-      #   Unresolvable.new(Persistable)
+      #   Unresolvable.new([ Persistable, Saveable ])
       #
-      # @param [ Class ] klass The class that was attempted to instantiate.
+      # @param [ Array<Class> ] classes The classes that were attempted to
+      #   instantiate with.
       #
       # @since 0.0.4
-      def initialize(klass)
-        @klass = klass
+      def initialize(classes)
+        @classes = classes
         super(
-          "Could not instantiate an object for #{klass}. " +
+          "Could not instantiate an object for any of: #{classes.join(", ")}. " +
           "Please ensure all required dependencies are in the container."
         )
       end
@@ -80,20 +82,27 @@ module Injectable
       end
     end
 
-    def implementation(name)
+    def registered_implementations(name)
       implementations[name] || Registry.implementation(name)
     end
 
-    def instantiate(klass)
-      begin
-        klass.new(*dependencies(klass))
-      rescue ArgumentError
-        raise Unresolvable.new(klass)
+    def instantiate(classes)
+      classes.each do |klass|
+        begin
+          return klass.new(*dependencies(klass))
+        rescue ArgumentError; end
       end
+      raise Unresolvable.new(classes)
     end
 
     def instantiated_objects
       @instantiated_objects ||= {}
+    end
+
+    def instantiated_class(classes)
+      classes.detect do |klass|
+        instantiated_objects[klass]
+      end
     end
   end
 end

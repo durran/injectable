@@ -25,7 +25,7 @@ describe Injectable do
       end
 
       it "delegates to the registry" do
-        expect(implementation).to eq(Admin)
+        expect(implementation).to eq([ Admin ])
       end
     end
 
@@ -58,7 +58,7 @@ describe Injectable do
     end
 
     it "adds the user to the implementations" do
-      expect(implementation).to eq(User)
+      expect(implementation).to eq([ User ])
     end
   end
 end
