@@ -38,6 +38,10 @@ describe Injectable::Container do
       before(:all) do
         class Phone; end
         class Tablet; end
+        class Application
+          include Injectable
+          dependencies :mobile
+        end
       end
 
       after(:all) do
@@ -55,12 +59,34 @@ describe Injectable::Container do
           container.register_implementation(:mobile, Phone, Tablet)
         end
 
-        let(:mobile) do
-          container.get(:mobile)
+        context "when getting an instance" do
+
+          let(:mobile) do
+            container.get(:mobile)
+          end
+
+          it "instantiates the first" do
+            expect(mobile).to be_a(Phone)
+          end
         end
 
-        it "instantiates the first" do
-          expect(mobile).to be_a(Phone)
+        context "when getting the parent" do
+
+          let(:application) do
+            container.get(:application)
+          end
+
+          let(:mobile) do
+            application.mobile
+          end
+
+          it "instantiates the object" do
+            expect(application).to be_a(Application)
+          end
+
+          it "uses the first implementation as the dependency" do
+            expect(mobile).to be_a(Phone)
+          end
         end
       end
 
@@ -78,12 +104,34 @@ describe Injectable::Container do
           container.register_implementation(:mobile, Phone, Tablet)
         end
 
-        let(:mobile) do
-          container.get(:mobile)
+        context "when getting an instance" do
+
+          let(:mobile) do
+            container.get(:mobile)
+          end
+
+          it "returns the already instantiated instance" do
+            expect(mobile).to eql(tablet)
+          end
         end
 
-        it "returns the already instantiated instance" do
-          expect(mobile).to eql(tablet)
+        context "when getting the parent" do
+
+          let(:application) do
+            container.get(:application)
+          end
+
+          let(:mobile) do
+            application.mobile
+          end
+
+          it "instantiates the object" do
+            expect(application).to be_a(Application)
+          end
+
+          it "uses the already instantiated instance" do
+            expect(mobile).to eql(tablet)
+          end
         end
       end
 
@@ -105,12 +153,34 @@ describe Injectable::Container do
           container.register_implementation(:mobile, Phone, Tablet)
         end
 
-        let(:mobile) do
-          container.get(:mobile)
+        context "when getting an instance" do
+
+          let(:mobile) do
+            container.get(:mobile)
+          end
+
+          it "returns the first instantiated instance" do
+            expect(mobile).to eql(phone)
+          end
         end
 
-        it "returns the first instantiated instance" do
-          expect(mobile).to eql(phone)
+        context "when getting the parent" do
+
+          let(:application) do
+            container.get(:application)
+          end
+
+          let(:mobile) do
+            application.mobile
+          end
+
+          it "instantiates the object" do
+            expect(application).to be_a(Application)
+          end
+
+          it "uses the first already instantiated instance" do
+            expect(mobile).to eql(phone)
+          end
         end
       end
     end
