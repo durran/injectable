@@ -33,6 +33,88 @@ describe Injectable::Container do
       UserFinder.new
     end
 
+    context "when multiple objects conform to the same interface" do
+
+      before(:all) do
+        class Phone; end
+        class Tablet; end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :Phone)
+        Object.__send__(:remove_const, :Tablet)
+      end
+
+      context "when neither are in the container" do
+
+        let(:container) do
+          described_class.new
+        end
+
+        before do
+          container.register_implementation(:mobile, Phone, Tablet)
+        end
+
+        let(:mobile) do
+          container.get(:mobile)
+        end
+
+        it "instantiates the first" do
+          expect(mobile).to be_a(Phone)
+        end
+      end
+
+      context "when one instance is in the container" do
+
+        let(:tablet) do
+          Tablet.new
+        end
+
+        let(:container) do
+          described_class.new(tablet)
+        end
+
+        before do
+          container.register_implementation(:mobile, Phone, Tablet)
+        end
+
+        let(:mobile) do
+          container.get(:mobile)
+        end
+
+        it "returns the already instantiated instance" do
+          expect(mobile).to eql(tablet)
+        end
+      end
+
+      context "when both instances are in the container" do
+
+        let(:tablet) do
+          Tablet.new
+        end
+
+        let(:phone) do
+          Phone.new
+        end
+
+        let(:container) do
+          described_class.new(tablet, phone)
+        end
+
+        before do
+          container.register_implementation(:mobile, Phone, Tablet)
+        end
+
+        let(:mobile) do
+          container.get(:mobile)
+        end
+
+        it "returns the first instantiated instance" do
+          expect(mobile).to eql(phone)
+        end
+      end
+    end
+
     context "when a cached instance exists in the container" do
 
       let(:service) do
