@@ -47,6 +47,10 @@ module Injectable
       end
     end
 
+    def put(object)
+      instantiated_objects[object.class] = object and self
+    end
+
     # This error is raised when asking for an object out of the container that
     # cannot be resolved.
     #

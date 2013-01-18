@@ -303,4 +303,44 @@ describe Injectable::Container do
       end
     end
   end
+
+  context "#put" do
+
+    before(:all) do
+      class UserFinder
+        include Injectable
+      end
+      class FacebookUserFinder
+        include Injectable
+      end
+    end
+
+    after(:all) do
+      Object.__send__(:remove_const, :UserFinder)
+      Object.__send__(:remove_const, :FacebookUserFinder)
+    end
+
+    context "when providing a single object" do
+
+      let(:user_finder) do
+        UserFinder.new
+      end
+
+      let(:container) do
+        described_class.new
+      end
+
+      let!(:put) do
+        container.put(user_finder)
+      end
+
+      it "puts the object in the container" do
+        expect(container.get(:user_finder)).to eql(user_finder)
+      end
+
+      it "returns the container" do
+        expect(put).to eq(container)
+      end
+    end
+  end
 end
