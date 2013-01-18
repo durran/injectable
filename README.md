@@ -54,6 +54,16 @@ container = Injectable::Container.new(user, facebook_service)
 user_service = container.get(:user_service)
 ```
 
+Objects can also be added to the container post instantiation.
+
+```ruby
+user = User.new
+facebook_service = FacebookService.new
+container = Injectable::Container.new
+container.put(user, facebook_service)
+user_service = container.get(:user_service)
+```
+
 Since `User` and `FacebookService` take no arguments, we don't even need to
 pass them into the container - it will automatically instantiate new ones:
 
