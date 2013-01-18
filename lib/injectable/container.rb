@@ -47,8 +47,21 @@ module Injectable
       end
     end
 
+    # Put objects into the container. Can be a single or multiple instances.
+    #
+    # @example Put an object in the container.
+    #   container.put(user)
+    #
+    # @example Put multiple objects in the container.
+    #   container.put(user, user_finder)
+    #
+    # @param [ *Object ] objects The objects to put in the container.
+    #
+    # @return [ Injectable::Container ] The container itself.
+    #
+    # @since 0.0.0
     def put(*objects)
-      objects.each do |object|
+      objects.flatten.each do |object|
         instantiated_objects[object.class] = object
       end and self
     end

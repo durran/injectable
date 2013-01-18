@@ -373,5 +373,36 @@ describe Injectable::Container do
         expect(put).to eq(container)
       end
     end
+
+    context "when providing an array of objects" do
+
+      let(:user_finder) do
+        UserFinder.new
+      end
+
+      let(:facebook_finder) do
+        FacebookUserFinder.new
+      end
+
+      let(:container) do
+        described_class.new
+      end
+
+      let!(:put) do
+        container.put([ user_finder, facebook_finder ])
+      end
+
+      it "puts the first object in the container" do
+        expect(container.get(:user_finder)).to eql(user_finder)
+      end
+
+      it "puts the second object in the container" do
+        expect(container.get(:facebook_user_finder)).to eql(facebook_finder)
+      end
+
+      it "returns the container" do
+        expect(put).to eq(container)
+      end
+    end
   end
 end
