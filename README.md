@@ -187,7 +187,7 @@ class UsersController < ApplicationController
 end
 ```
 
-Copyright (c) 2012 Durran Jordan
+Copyright (c) 2012-2013 Durran Jordan
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
