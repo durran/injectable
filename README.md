@@ -187,6 +187,15 @@ class UsersController < ApplicationController
 end
 ```
 
+Roadmap
+-------
+
+* Support for namespaced dependencies
+
+
+License
+-------
+
 Copyright (c) 2012-2013 Durran Jordan
 
 Permission is hereby granted, free of charge, to any person obtaining
