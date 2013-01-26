@@ -187,12 +187,6 @@ class UsersController < ApplicationController
 end
 ```
 
-Roadmap
--------
-
-* Support for namespaced dependencies
-
-
 License
 -------
 
