@@ -1,10 +1,10 @@
-source :rubygems
+source "https://rubygems.org"
 
 gemspec
 gem "rake"
 
 group :test do
-  gem "rspec", "~> 2.12"
+  gem "rspec", "~> 2.13"
 
   unless ENV["CI"]
     gem "guard-rspec"
