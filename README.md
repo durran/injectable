@@ -1,4 +1,4 @@
-Injectable [![Build Status](https://secure.travis-ci.org/durran/injectable.png?branch=master&.png)](http://travis-ci.org/durran/injectable) [![Code Climate](https://codeclimate.com/github/durran/darstellung.png)](https://codeclimate.com/github/durran/injectable)
+Injectable [![Build Status](https://secure.travis-ci.org/durran/injectable.png?branch=master&.png)](http://travis-ci.org/durran/injectable) [![Code Climate](https://codeclimate.com/github/durran/darstellung.png)](https://codeclimate.com/github/durran/injectable) [![Coverage Status](https://coveralls.io/repos/durran/injectable/badge.png?branch=master)](https://coveralls.io/r/durran/injectable?branch=master)
 ========
 
 Injectable is an extremely simple dependency injection framework for Ruby. It's
